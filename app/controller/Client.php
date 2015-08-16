@@ -25,7 +25,7 @@ class ClientController extends ParentController{
 
         $client = $this->Client->insert($data);
         if($client){
-            echo json_encode($client);
+            $this->response($client);
         }
     }
 }

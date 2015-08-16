@@ -5,8 +5,8 @@
  * Date: 16/08/15
  * Time: 4:25
  */
-
-class ParentController {
+require_once(__DIR__.'../../../config/JsonResponse.php');
+class ParentController extends JsonResponse{
     /**
      * @param $string
      *

@@ -9,8 +9,8 @@
  * como tal para evitar crear el objeto una y otra vez
  */
 global $connection;
-
-class Init {
+require_once('JsonResponse.php');
+class Init extends JsonResponse{
 
     private static $config;
     private static $error_code = ['error'=>'404', 'message'=>'No found'];
@@ -68,15 +68,15 @@ class Init {
                         $_REQUEST = array();
                         $response = call_user_func_array([$obj,$action],[$params]);
                     }catch (Exception $e){
-                        echo json_encode(self::$error_code);
+                        self::response_s(self::$error_code);
                     }
 
             }else{
-                echo json_encode(self::$error_code);
+                self::response_s(self::$error_code);
             }
 
         }else{
-            echo json_encode(self::$error_code);
+            self::response_s(self::$error_code);
         }
 
     }
@@ -89,7 +89,7 @@ class Init {
      */
     private static function check_url($url){
         if(!$url){
-            echo json_encode(self::$error_code);
+            self::response_s(self::$error_code);
         }
     }
 

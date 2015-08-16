@@ -28,4 +28,17 @@ class ClientController extends ParentController{
             $this->response($client);
         }
     }
+
+    public function update_post($input){
+        $data = ['email'        => $input['email'],
+                 'commission'   => $input['commission'],
+                 'public_k'     => $input['public_k'],
+                 'private_k'    => $input['private_k'],
+                 'status'       => 1];
+
+        $client = $this->Client->update($input['id'],$data);
+        if($client){
+            $this->response($client);
+        }
+    }
 }

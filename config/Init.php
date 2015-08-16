@@ -10,11 +10,10 @@
  */
 global $connection;
 require_once('JsonResponse.php');
-class Init extends JsonResponse{
+class Init {
 
     private static $config;
-    private static $error_code = ['error'=>'404', 'message'=>'No found'];
-
+    private static $request;
     /**
      * @return mysqli
      *
@@ -49,9 +48,11 @@ class Init extends JsonResponse{
 
         self::check_url($url);
 
-        $file       = self::get_controller($url);
-        $action     = self::get_action($url);
-        $params     = self::get_params($url);
+        self::$request    = new JsonResponse();
+
+        $file             = self::$request->get_controller($url);
+        $action           = self::$request->get_action($url);
+        $params           = self::$request->get_params($url);
 
         $controller = $file.'Controller';
 
@@ -68,15 +69,15 @@ class Init extends JsonResponse{
                         $_REQUEST = array();
                         $response = call_user_func_array([$obj,$action],[$params]);
                     }catch (Exception $e){
-                        self::response_s(self::$error_code);
+                        self::$request->default_response();
                     }
 
             }else{
-                self::response_s(self::$error_code);
+                self::$request->default_response();
             }
 
         }else{
-            self::response_s(self::$error_code);
+            self::$request->default_response();
         }
 
     }
@@ -89,44 +90,10 @@ class Init extends JsonResponse{
      */
     private static function check_url($url){
         if(!$url){
-            self::response_s(self::$error_code);
+            self::$request->default_response();
         }
     }
 
-    /**
-     * @param $url
-     * @return string
-     *
-     * obtiene el primer valor de un array y lo
-     * devuelve para ser usado como controlador
-     */
-    private static function get_controller(&$url){
-        $controller = ucfirst(array_shift($url));
-        return $controller;
-    }
 
-    /**
-     * @param $url
-     * @return string
-     *
-     * Obtiene el primer valor de un array y lo
-     * devuelve para ser usado como una accion
-     */
-    private static function get_action(&$url){
-        $action = ucfirst(array_shift($url)).'_'.strtolower($_SERVER['REQUEST_METHOD']);
-        return $action;
-    }
-
-    /**
-     * @param $url
-     * @return string
-     *
-     * obtiene el primer valor de un array y lo devuelve para
-     * ser usado como parametro (solo se acepta un parametro
-     */
-    private static function get_params(&$url){
-        $params = ucfirst(array_shift($url));
-        return $params?$params:$_REQUEST;
-    }
 }
 

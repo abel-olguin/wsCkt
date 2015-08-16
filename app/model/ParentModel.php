@@ -26,7 +26,7 @@ class ParentModel {
     public function insert(array $args)
     {
         $table      = static::$table_name;
-        $now        = date('d-m-Y :: H:m:s');
+        $now        = date("Y-m-d H:i:s");
         $columns    = implode(",", array_keys($args));
         $values     = [];
         $vars       = array_values($args);
